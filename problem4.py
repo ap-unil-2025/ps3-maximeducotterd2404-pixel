@@ -21,18 +21,12 @@ Many companies use Python for their projects."""
 
 
 def count_words(filename):
-    """
-    Count total words in the file.
+    with open (filename, "r") as f:
+        text = f.read()         # lire tout le contenu du fichier
+        words = text.split()    # séparer le texte en mots
+        return len(words)       # compter combien il y a de mots
 
-    Args:
-        filename (str): Name of the file to analyze
 
-    Returns:
-        int: Total number of words
-    """
-    # TODO: Open file and count words
-    # Hint: Use split() to separate words
-    pass
 
 
 def count_lines(filename):
@@ -46,7 +40,9 @@ def count_lines(filename):
         int: Total number of lines
     """
     # TODO: Open file and count lines
-    pass
+    with open(filename, 'r') as f:
+        return sum(1 for _ in f)
+  
 
 
 def count_characters(filename, include_spaces=True):
@@ -60,9 +56,16 @@ def count_characters(filename, include_spaces=True):
     Returns:
         int: Total number of characters
     """
+
     # TODO: Open file and count characters
     # If include_spaces is False, don't count spaces
-    pass
+    with open(filename, 'r') as f:
+        text = f.read()
+    if include_spaces:
+        return len(text)  # compte tout
+    else:
+        return sum(1 for ch in text if not ch.isspace())
+
 
 
 def find_longest_word(filename):
@@ -77,7 +80,21 @@ def find_longest_word(filename):
     """
     # TODO: Find the longest word
     # Hint: You might need to remove punctuation
-    pass
+    import string
+    with open(filename, 'r') as f:
+        text = f.read()
+    table = str.maketrans({ch: " " for ch in string.punctuation})
+    cleaned = text.translate(table)
+
+    # séparer en mots
+    words = cleaned.split()
+
+    if not words:   # si le fichier est vide
+        return ""
+
+    return max(words, key=len)
+
+    
 
 
 def word_frequency(filename):
@@ -93,7 +110,30 @@ def word_frequency(filename):
     """
     import string
 
+    with open(filename, 'r') as f:
+        text = f.read()
+
+    # mettre en minuscules
+    text = text.lower()
+
+    # enlever la ponctuation
+    table = str.maketrans({ch: " " for ch in string.punctuation})
+    cleaned = text.translate(table)
+
+    # découper en mots
+    words = cleaned.split()
+
+    # dictionnaire vide
     frequency = {}
+
+    # compter chaque mot
+    for w in words:
+        if w in frequency:
+            frequency[w] += 1
+        else:
+            frequency[w] = 1
+
+    return frequency
 
     # TODO: Open file
     # TODO: Read all words
@@ -101,7 +141,7 @@ def word_frequency(filename):
     # TODO: Remove punctuation (use string.punctuation)
     # TODO: Count frequency of each word
 
-    return frequency
+    
 
 
 def analyze_file(filename):
